@@ -13,16 +13,16 @@ The objectives are:
 General tools and method can be broken into 3 parts:
 
 **1. Data collection**
-..* Combination of scrapy and selenium to collect information for this project
-..* Pandas to clean and transform data for modelling 
+  * Combination of scrapy and selenium to collect information for this project
+  * Pandas to clean and transform data for modelling 
 
 **2. Linear regression**
-..* scikit-learn for price prediction
+  * scikit-learn for price prediction
 
 **3. NLP**
-..* Word2Vec for processing social media specific words
-..* Gensim for sentiment analysis
+  * Word2Vec for processing social media specific words
+  * Gensim for sentiment analysis
 
 **4. Web app**
-..* Flask/javascript used to communicate results in the web app
-..* HTML/CSS/Bootstrap for styling
+  * Flask/javascript used to communicate results in the web app
+  * HTML/CSS/Bootstrap for styling
