@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<head>
+
+  <title> Sneaker App </title>
+  <meta charset="utf-8">
+
+  <!-- load the jquery library -->  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <!-- load the bootstrap library -->  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- load the JavaScript libraries -->  
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <!-- highchart libraries -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <!-- select2 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+  <!-- bootstrap stylesheet -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- fonts and icons -->
+  <link href='//fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+</head>
+
+<style type = "text/css">
+
+  body { padding-top: 120px; 
+  }
+
+   /* Format navbar */
+  .navbar-default {
+  background-color: #d3e3ff;
+  border-color: #3034ac;
+  height: 100px;
+  font-size: 20px;
+  font-family: 'Roboto Slab';
+  padding-top: 33px;
+  padding-bottom: 10px;
+  display: inline-block;
+  float: none;
+  }
+
+  /* Format text below shoe image */
+  td {
+    font-family: 'Roboto Slab', Gadget, sans-serif;
+    vertical-align: top;
+    font-size: 14px;
+  }
+
+  .bs-callout {
+    padding: 0px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-left-color: navy;
+    border-radius: 3px;
+    font-size: 18px;
+    font-family: 'Roboto Slab';
+  }
+  
+  ::-webkit-input-placeholder { 
+    color: gray;
+  }
+
+  .container {
+    width: 1200px;
+  }
+
+  .caption {
+    font-size: 12px;
+    color: gray; 
+    text-align: left;
+    /*width: 230px;*/
+  }
+
+
+  /* Governs the title of the chart */ 
+  .highcharts-title {
+    font-family: 'Roboto Slab', Gadget, sans-serif;
+  }
+
+  .material-icons { 
+    font-size: 20px; }
+
+  .table-borderless > tbody > tr > td,
+  .table-borderless > tbody > tr > th,
+  .table-borderless > tfoot > tr > td,
+  .table-borderless > tfoot > tr > th,
+  .table-borderless > thead > tr > td,
+  .table-borderless > thead > tr > th {
+      border: none;
+  }
+
+
+</style>
+
+
+<div class = "container" >
+  
+
+  <!-- search bar -->
+  <form class="navbar-form navbar-default navbar-fixed-top" role="search">
+      <div class="form-group">
+       <label>SNEAKER-CAST   <br>
+           <select class="user-input" id="usr" style="width: 895px;"></select> 
+          <input type="button" class="btn btn-default" onClick="collectShoe()" value="Submit"></input>
+        </label>    
+      </div> 
+  </form>
+
+  <div class="row">  
+    
+  </div>
+
+  <div class="row">  
+    <div class="bs-callout bs-callout-warning">
+      <div class="panel-body">Sales Report</div>
+    </div>
+    <div class="col-md-4" style="padding-top: 20px;" id="shoe-image">
+      <img src="http://pre13.deviantart.net/2770/th/pre/f/2013/211/4/7/jordan_1__bred__sketch_by_mattisamazingps-d6fv6sx.png" class="img-thumbnail" id="shoe-pic" />
+      <div class="caption" id="img-capt"></div>
+      <br>
+      <table class='table borderless'>
+        <tr><td><i class="material-icons">today</i></td><td>Release date:</td><td><span class="description" id="shoe-date"></span></td></tr>
+        <tr><td><i class="material-icons">list</i></td><td># of transactions in the last month:</td><td><span class="description" id="transactions"></span></td></tr>
+        <tr><td><i class="material-icons" id="trend-icon">trending_up</i></td><td colspan="2">Sale prices are forecasted to <b><span class="text-success" id="rise-fall-pred">...</span></b> within the next 7 days</td></tr>
+        <tr><td><i class="material-icons">attach_money</i></td><td>Next sale price:</td><td><span class="description" id="sale-price-pred"></span></td></tr> 
+      </table>
+    </div>
+    <div class = "col-md-8" id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  </div>
+  
+  <div class="bs-callout bs-callout-warning">
+    <div class="panel-body">Social Media Report</div>
+  </div>
+
+  <div class="row">
+    <div class = "col-md-4" id="container" style="min-width: 310px; height: 200px; margin:0 auto">
+      <p><i class="material-icons">whatshot</i>  Instagram engagement level: <span class="description" id="insta-engagement"></span></p> 
+    </div>
+    <div class = "col-md-4" id="container" style="min-width: 310px; height: 200px; margin:0 auto">
+        <p><i class="material-icons" id="insta-sent-icon">sentiment_neutral</i>  Instagram sentiment level: <span class="description" id="insta-sentiment"></span></p> 
+    </div>
+
+    <div class = "col-md-4" id="container" style="min-width: 310px; height: 200px; margin:0 auto">
+        <p><i class="material-icons" id="insta-count-icon">chat_bubble_outline</i>  # of comments last month: <span class="description" id="insta-count"></span></p> 
+    </div>
+
+
+  </div>
+
+</div>
+
+<body>
+
+<script type="text/javascript">
+
+
+var all_sneakers;
+d3.json("name_data7.json", function(data) {
+  all_sneakers = data.sneakers;
+  $(".user-input").select2({
+  placeholder: "Type your sneaker here",
+  data: all_sneakers
+  // data: name_list_data
+});
+});
+
+
+</script>
+
+<script>
+
+
+var answer = ""
+
+// Gets the shoe name that the user typed in
+function collectShoe() {
+  var userInput = document.getElementById("usr").value;
+  console.log(userInput)
+
+  $.ajax({
+    type: "POST",
+    contentType: "application/json; charset=utf-8",
+    url: "/sneakers",
+    dataType: "json",
+    async: true,
+    data: "{\"question\": [\""+userInput+"\"]}",
+    success: function(d) {
+      img_url = d.img_url
+      sneaker_name = d.sneaker_name
+      transactions = d.transactions
+      release_date = d.release_date
+      predicted = d.predicted
+      trend = d.trend
+      engagement = d.engagement
+      sentiment = d.sentiment
+      comment_count = d.comment_count
+
+      sentiment = parseFloat(sentiment)
+      comment_count = parseInt(comment_count)
+
+      console.log(transactions)
+      console.log(release_date)
+
+      // Update sale
+      document.getElementById("img-capt").innerHTML = sneaker_name
+      document.getElementById("shoe-pic").src = img_url
+      document.getElementById("transactions").innerHTML = transactions
+      document.getElementById("shoe-date").innerHTML = release_date
+
+      document.getElementById("rise-fall-pred").innerHTML = trend
+      document.getElementById("sale-price-pred").innerHTML = "$" + Math.round(predicted)
+
+      // Update social media
+      document.getElementById('insta-sentiment').innerHTML = sentiment
+      document.getElementById('insta-engagement').innerHTML = engagement
+      document.getElementById('insta-count').innerHTML = comment_count
+
+
+    Highcharts.setOptions({
+    global: {
+            //useUTC: false
+        }
+      });
+
+    Highcharts.chart('container', {
+    title: {
+        text: 'Sales History'
+    },
+
+    xAxis: {
+        type: 'datetime',
+        tickInterval: 24 * 3600 * 1000,
+        labels: {
+          // http://stackoverflow.com/questions/7101464/how-to-get-highcharts-dates-in-the-x-axis
+            format: '{value: %b %e %Y}',
+            align: 'right',
+            rotation: -45
+        }
+    },
+
+    yAxis: {
+        title: {
+            text: 'Sale Price ($)'
+        }
+    },
+
+    tooltip: {
+        crosshairs: true,
+        shared: true,
+        valuePrefix: '$'
+    },
+
+    legend: {
+    },
+
+    series: [{
+        name: 'Average Sale Price',
+        data: d.sale_mean,
+        zIndex: 1,
+        pointInterval: 24 * 3600 * 1000,
+        marker: {
+            fillColor: 'white',
+            lineWidth: 2,
+            lineColor: Highcharts.getOptions().colors[0]
+        }
+    }, {
+        name: 'Range',
+        data: d.sale_range,
+        type: 'arearange',
+        lineWidth: 0,
+        linkedTo: ':previous',
+        pointInterval: 24 * 3600 * 1000,
+        color: Highcharts.getOptions().colors[0],
+        fillOpacity: 0.3,
+        zIndex: 0
+    }]
+});
+
+    // Conditional formatting for the trend forecast
+    if (trend == "fall") {
+      document.getElementById("rise-fall-pred").style.color = "red";
+      document.getElementById("trend-icon").innerHTML = "trending_down";
+    } else {
+      document.getElementById("rise-fall-pred").style.color = "green";
+      document.getElementById("trend-icon").innerHTML = "trending_up";
+    }
+
+    // Conditional formatting for the sentiment report
+    if (sentiment >= 80) {
+      document.getElementById("insta-sent-icon").innerHTML = "sentiment_very_satisfied";
+    } else if (sentiment > 50) {
+      document.getElementById("insta-sent-icon").innerHTML = "sentiment_satisfied";
+    } else if (sentiment == 50) {
+      document.getElementById("insta-sent-icon").innerHTML = "sentiment_neutral";
+    } else if (sentiment >= 30) {
+      document.getElementById("insta-sent-icon").innerHTML = "sentiment_dissatisfied";
+    } else if (sentiment <30) {
+      document.getElementById("insta-sent-icon").innerHTML = "sentiment_vety_dissatisfied";
+    }
+
+
+    }
+
+  })
+}
+        
+</script>
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
