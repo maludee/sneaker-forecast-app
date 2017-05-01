@@ -2,7 +2,7 @@
 
 An app that predicts sneaker resale prices in the near-future.
 
-![screenshot](sneaker-app.png)
+![screenshot](images/sneaker-app.png)
 
 A broad overview of this project:
 
