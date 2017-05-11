@@ -10,7 +10,7 @@ The objectives are:
 1. Predict prices on the resale market for the next 7 days
 2. Collect important information about sneakers that can help inform buying or selling decisions
 
-General tools and method can be broken into 3 parts:
+General tools and method can be broken into 4 parts:
 
 **1. Data collection**
   * Combination of scrapy and selenium to collect information for this project
